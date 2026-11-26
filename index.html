@@ -22,12 +22,18 @@
       --border-strong: rgba(249, 115, 22, 0.45);
       --ok: #22c55e;
       --danger: #ef4444;
+      --shadow-card: 0 12px 28px -8px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--border);
+      --shadow-hover: 0 20px 36px -10px rgba(0, 0, 0, 0.72), 0 0 22px -6px rgba(249, 115, 22, 0.25);
     }
 
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
     }
 
     body {
@@ -42,16 +48,21 @@
     header {
       position: sticky;
       top: 0;
-      z-index: 20;
-      backdrop-filter: blur(10px);
-      background: rgba(11, 15, 23, 0.88);
+      z-index: 30;
+      backdrop-filter: blur(12px);
+      background: rgba(11, 15, 23, 0.9);
       border-bottom: 1px solid var(--border);
       padding: 14px 20px;
+    }
+
+    .header-inner {
+      max-width: 1240px;
+      margin: 0 auto;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 12px;
+      gap: 14px;
     }
 
     .brand {
@@ -60,16 +71,50 @@
       gap: 12px;
     }
 
+    .brand-badge {
+      width: 42px;
+      height: 42px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, var(--accent), var(--accent-hover));
+      color: #090d14;
+      font-weight: 900;
+      font-size: 0.95rem;
+      display: grid;
+      place-items: center;
+      flex-shrink: 0;
+    }
+
     .brand-title {
-      font-size: 1.1rem;
+      font-size: 1.08rem;
       font-weight: 800;
       letter-spacing: 0.4px;
       text-transform: uppercase;
     }
 
     .brand-sub {
-      font-size: 0.85rem;
+      font-size: 0.84rem;
       color: var(--muted);
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .wa-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 8px;
+      background: rgba(34, 197, 94, 0.14);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      color: #86efac;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
     }
 
     .cart-btn {
@@ -79,23 +124,28 @@
       padding: 9px 14px;
       border-radius: 8px;
       cursor: pointer;
-      font-weight: 600;
+      font-weight: 700;
+      font-size: 0.9rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .cart-btn:hover {
       border-color: var(--border-strong);
+      background: var(--surface-3);
     }
 
     .container {
-      max-width: 1200px;
+      max-width: 1240px;
       margin: 0 auto;
-      padding: 24px 20px 100px;
+      padding: 24px 20px 110px;
     }
 
     .controls {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
       margin-bottom: 22px;
       align-items: center;
       justify-content: space-between;
@@ -112,13 +162,18 @@
       background: var(--surface);
       color: var(--text);
       border: 1px solid var(--border);
-      padding: 8px 14px;
+      padding: 9px 14px;
       border-radius: 8px;
       font-size: 0.9rem;
     }
 
     .filter-btn {
       cursor: pointer;
+      transition: background 0.15s ease, border-color 0.15s ease;
+    }
+
+    .filter-btn:hover {
+      border-color: var(--border-strong);
     }
 
     .filter-btn.active {
@@ -128,9 +183,18 @@
       font-weight: 700;
     }
 
+    .search-input {
+      min-width: 240px;
+    }
+
+    .search-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(270px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(275px, 1fr));
       gap: 18px;
     }
 
@@ -142,13 +206,47 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
     }
 
-    .card img {
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-hover);
+      border-color: var(--border-strong);
+    }
+
+    .img-wrap {
+      position: relative;
       width: 100%;
-      height: 190px;
-      object-fit: cover;
+      height: 195px;
       background: var(--surface-2);
+      overflow: hidden;
+    }
+
+    .img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .zoom-btn {
+      position: absolute;
+      right: 10px;
+      bottom: 10px;
+      background: rgba(11, 15, 23, 0.85);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 9px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .zoom-btn:hover {
+      border-color: var(--accent);
     }
 
     .card-body {
@@ -162,14 +260,16 @@
     .meta {
       display: flex;
       justify-content: space-between;
-      font-size: 0.75rem;
+      gap: 8px;
+      font-size: 0.74rem;
       color: var(--accent-2);
       font-weight: 700;
       text-transform: uppercase;
+      letter-spacing: 0.4px;
     }
 
     .title {
-      font-size: 1rem;
+      font-size: 1.02rem;
       font-weight: 700;
     }
 
@@ -179,9 +279,10 @@
     }
 
     .price {
-      font-size: 1.1rem;
+      font-size: 1.12rem;
       font-weight: 800;
       margin-top: auto;
+      padding-top: 4px;
     }
 
     .actions {
@@ -194,7 +295,11 @@
     .qty-row {
       display: flex;
       align-items: center;
-      gap: 8px;
+      justify-content: space-between;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 4px;
     }
 
     .qty-btn {
@@ -202,10 +307,15 @@
       height: 32px;
       border-radius: 6px;
       border: 1px solid var(--border);
-      background: var(--surface-2);
+      background: var(--surface-3);
       color: var(--text);
       cursor: pointer;
       font-weight: 700;
+      font-size: 0.95rem;
+    }
+
+    .qty-btn:hover {
+      border-color: var(--accent);
     }
 
     .btn-primary {
@@ -215,22 +325,72 @@
       border: none;
       background: var(--accent);
       color: #090d14;
-      font-weight: 700;
+      font-weight: 800;
+      font-size: 0.9rem;
       cursor: pointer;
     }
 
     .btn-primary:hover {
       background: var(--accent-hover);
-      color: #fff;
+      color: #ffffff;
+    }
+
+    .btn-secondary {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      font-weight: 600;
+      font-size: 0.86rem;
+      cursor: pointer;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--border-strong);
+    }
+
+    .sticky-bar {
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 25;
+      background: rgba(11, 15, 23, 0.94);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border);
+      padding: 10px 20px;
+    }
+
+    .sticky-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .sticky-status {
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .sticky-btns {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
     }
 
     .drawer-backdrop {
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.65);
+      background: rgba(0, 0, 0, 0.7);
       display: none;
       justify-content: flex-end;
-      z-index: 40;
+      z-index: 50;
     }
 
     .drawer-backdrop.open {
@@ -239,7 +399,7 @@
 
     .drawer {
       width: 100%;
-      max-width: 420px;
+      max-width: 430px;
       background: var(--surface);
       height: 100%;
       padding: 20px;
@@ -258,6 +418,12 @@
       background: var(--surface-2);
       color: var(--text);
       margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+
+    .field:focus {
+      outline: none;
+      border-color: var(--accent);
     }
 
     .summary-line {
@@ -269,38 +435,127 @@
 
     .total-line {
       font-weight: 800;
-      font-size: 1.05rem;
+      font-size: 1.06rem;
       border-top: 1px solid var(--border);
       padding-top: 8px;
       margin-top: 6px;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.82);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 60;
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal-box {
+      max-width: 680px;
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .modal-box img {
+      width: 100%;
+      max-height: 70vh;
+      object-fit: contain;
+      border-radius: 8px;
+      background: var(--surface-2);
+    }
+
+    .toast {
+      position: fixed;
+      top: 76px;
+      right: 20px;
+      z-index: 70;
+      background: var(--surface-3);
+      border: 1px solid var(--ok);
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 8px;
+      font-size: 0.86rem;
+      font-weight: 600;
+      display: none;
+    }
+
+    .toast.show {
+      display: block;
     }
   </style>
 </head>
 <body>
   <header>
-    <div class="brand">
-      <div>
-        <div class="brand-title">Soluciones de Carga y Herramental</div>
-        <div class="brand-sub">Catálogo Digital • WhatsApp: 55 4710 2129</div>
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-badge">SCH</div>
+        <div>
+          <div class="brand-title">Soluciones de Carga y Herramental</div>
+          <div class="brand-sub">Catálogo Digital • WhatsApp: 55 4710 2129</div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <a class="wa-pill" href="https://wa.me/5215547102129" target="_blank" rel="noopener noreferrer">
+          WhatsApp Directo
+        </a>
+        <button class="cart-btn" id="openCartBtn" type="button">
+          Carrito (<span id="cartCount">0</span>)
+        </button>
       </div>
     </div>
-    <button class="cart-btn" id="openCartBtn">Carrito (<span id="cartCount">0</span>)</button>
   </header>
 
   <main class="container">
     <div class="controls">
       <div class="filters" id="categoryFilters"></div>
-      <input type="search" class="search-input" id="searchInput" placeholder="Buscar producto o código..." />
+      <input
+        type="search"
+        class="search-input"
+        id="searchInput"
+        placeholder="Buscar por código, medida o producto..."
+      />
     </div>
     <div class="grid" id="productGrid"></div>
   </main>
+
+  <div class="sticky-bar">
+    <div class="sticky-inner">
+      <div class="sticky-status" id="stickyStatus">
+        Tu carrito está vacío. Ajusta la cantidad y pulsa Guardar en carrito.
+      </div>
+      <div class="sticky-btns">
+        <button class="cart-btn" id="stickyOpenCart" type="button">
+          Ver carrito (<span id="stickyCartCount">0</span>)
+        </button>
+        <button class="qty-btn" style="width:auto;padding:0 12px;" id="clearCartBtn" type="button">
+          Vaciar
+        </button>
+        <button class="btn-primary" style="width:auto;padding:8px 14px;" id="stickyWaBtn" type="button">
+          Cotizar por WhatsApp
+        </button>
+      </div>
+    </div>
+  </div>
 
   <div class="drawer-backdrop" id="cartDrawer">
     <div class="drawer">
       <div style="display:flex;justify-content:space-between;align-items:center;">
         <h2>Tu Pedido</h2>
-        <button class="cart-btn" id="closeCartBtn">Cerrar</button>
+        <button class="cart-btn" id="closeCartBtn" type="button">Cerrar</button>
       </div>
+
       <div id="cartItems"></div>
 
       <div>
@@ -311,9 +566,22 @@
       </div>
 
       <div id="cartSummary"></div>
-      <button class="btn-primary" id="sendOrderBtn">Enviar pedido por WhatsApp</button>
+      <button class="btn-primary" id="sendOrderBtn" type="button">Enviar pedido por WhatsApp</button>
+      <button class="btn-secondary" id="drawerClearBtn" type="button">Vaciar carrito</button>
     </div>
   </div>
+
+  <div class="modal-backdrop" id="imgModal">
+    <div class="modal-box">
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <strong id="modalTitle">Vista previa</strong>
+        <button class="cart-btn" id="closeModalBtn" type="button">Cerrar</button>
+      </div>
+      <img id="modalImg" src="" alt="" />
+    </div>
+  </div>
+
+  <div class="toast" id="toastBox">Producto agregado al carrito</div>
 
   <script>
     const WHATSAPP_NUMBER = "5215547102129";
@@ -322,16 +590,18 @@
         id: "ACP2x16W",
         category: "Bandas de Sujeción",
         name: "Banda para Riel Logístico",
-        desc: "4.8 metros de largo x 2\" de ancho • Caja con 20 piezas",
+        desc: "Medidas: 4.8 metros de largo x 2\" de ancho • Promoción: Caja con 20 piezas",
         price: 2500.00,
+        note: "Caja con 20 piezas ($125.00 c/u)",
         img: "img/banda-riel.jpg"
       },
       {
         id: "ACP2X30G",
         category: "Bandas de Sujeción",
         name: "Banda con Gancho de Garfio",
-        desc: "9 metros de largo x 2\" de ancho • Caja con 10 piezas",
+        desc: "Medidas: 9 metros de largo x 2\" de ancho • Promoción: Caja con 10 piezas",
         price: 2600.00,
+        note: "Caja con 10 piezas ($260.00 c/u)",
         img: "img/banda-garfio.jpg"
       },
       {
@@ -340,6 +610,7 @@
         name: "Cadena de Arrastre Grado 70",
         desc: "6 metros de largo con ganchos 5/16\" • Por pieza",
         price: 1220.00,
+        note: "Por pieza",
         img: "img/cadena-g70.jpg"
       }
     ];
@@ -355,12 +626,21 @@
       return num.toLocaleString("es-MX", { style: "currency", currency: "MXN" });
     }
 
+    function showToast(text) {
+      const box = document.getElementById("toastBox");
+      box.textContent = text;
+      box.classList.add("show");
+      clearTimeout(showToast._t);
+      showToast._t = setTimeout(() => box.classList.remove("show"), 1800);
+    }
+
     function renderFilters() {
       const cats = ["Todos", ...new Set(PRODUCTS.map(p => p.category))];
       const el = document.getElementById("categoryFilters");
       el.innerHTML = cats.map(c =>
-        `<button class="filter-btn ${c === activeCategory ? "active" : ""}" data-cat="${c}">${c}</button>`
+        `<button class="filter-btn ${c === activeCategory ? "active" : ""}" data-cat="${c}" type="button">${c}</button>`
       ).join("");
+
       el.querySelectorAll(".filter-btn").forEach(btn => {
         btn.addEventListener("click", () => {
           activeCategory = btn.dataset.cat;
@@ -374,62 +654,105 @@
       const grid = document.getElementById("productGrid");
       const filtered = PRODUCTS.filter(p => {
         const matchCat = activeCategory === "Todos" || p.category === activeCategory;
-        const text = `${p.id} ${p.name} ${p.desc} ${p.category}`.toLowerCase();
+        const text = `${p.id} ${p.name} ${p.desc} ${p.category} ${p.note || ""}`.toLowerCase();
         const matchSearch = text.includes(searchTerm.toLowerCase());
         return matchCat && matchSearch;
       });
 
+      if (filtered.length === 0) {
+        grid.innerHTML = `<p style="color:var(--muted);">No se encontraron productos con ese criterio.</p>`;
+        return;
+      }
+
       grid.innerHTML = filtered.map(p => `
         <article class="card">
-          <img src="${p.img}" alt="${p.name}" onerror="this.style.display='none'" />
+          <div class="img-wrap">
+            <img src="${p.img}" alt="${p.name}" loading="lazy" onerror="this.style.display='none'" />
+            <button class="zoom-btn" data-zoom="${p.id}" type="button">Ampliar</button>
+          </div>
           <div class="card-body">
             <div class="meta"><span>${p.category}</span><span>${p.id}</span></div>
             <div class="title">${p.name}</div>
             <div class="desc">${p.desc}</div>
-            <div class="price">${formatMoney(p.price)} <span style="font-size:0.75rem;color:var(--muted);font-weight:500;">IVA incl.</span></div>
+            <div class="price">
+              ${formatMoney(p.price)}
+              <span style="font-size:0.75rem;color:var(--accent-2);font-weight:600;">IVA incl.</span>
+              ${p.note ? `<div style="font-size:0.78rem;color:#4ade80;font-weight:600;margin-top:2px;">${p.note}</div>` : ""}
+            </div>
           </div>
           <div class="actions">
             <div class="qty-row">
-              <button class="qty-btn" data-minus="${p.id}">-</button>
-              <span style="min-width:24px;text-align:center;" id="qty-${p.id}">${quantities[p.id]}</span>
-              <button class="qty-btn" data-plus="${p.id}">+</button>
+              <button class="qty-btn" data-minus="${p.id}" type="button">-</button>
+              <span style="min-width:28px;text-align:center;font-weight:700;" id="qty-${p.id}">${quantities[p.id]}</span>
+              <button class="qty-btn" data-plus="${p.id}" type="button">+</button>
             </div>
-            <button class="btn-primary" data-add="${p.id}">Guardar en carrito</button>
+            <button class="btn-primary" data-add="${p.id}" type="button">Guardar en carrito</button>
+            <button class="btn-secondary" data-wa-one="${p.id}" type="button">Cotizar por WhatsApp</button>
           </div>
         </article>
       `).join("");
 
-      grid.querySelectorAll("[data-minus]").forEach(b => {
-        b.addEventListener("click", () => {
-          const id = b.dataset.minus;
+      grid.querySelectorAll("[data-zoom]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const prod = PRODUCTS.find(x => x.id === btn.dataset.zoom);
+          document.getElementById("modalTitle").textContent = `${prod.id} - ${prod.name}`;
+          document.getElementById("modalImg").src = prod.img;
+          document.getElementById("modalImg").alt = prod.name;
+          document.getElementById("imgModal").classList.add("open");
+        });
+      });
+
+      grid.querySelectorAll("[data-minus]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.minus;
           quantities[id] = Math.max(1, quantities[id] - 1);
           document.getElementById(`qty-${id}`).textContent = quantities[id];
         });
       });
 
-      grid.querySelectorAll("[data-plus]").forEach(b => {
-        b.addEventListener("click", () => {
-          const id = b.dataset.plus;
+      grid.querySelectorAll("[data-plus]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const id = btn.dataset.plus;
           quantities[id] += 1;
           document.getElementById(`qty-${id}`).textContent = quantities[id];
         });
       });
 
-      grid.querySelectorAll("[data-add]").forEach(b => {
-        b.addEventListener("click", () => {
-          const prod = PRODUCTS.find(x => x.id === b.dataset.add);
+      grid.querySelectorAll("[data-add]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const prod = PRODUCTS.find(x => x.id === btn.dataset.add);
           const qty = quantities[prod.id];
           const existing = cart.find(x => x.id === prod.id);
           if (existing) existing.qty += qty;
           else cart.push({ ...prod, qty });
           updateCartUI();
+          showToast(`Agregado: ${qty} × ${prod.name}`);
+        });
+      });
+
+      grid.querySelectorAll("[data-wa-one]").forEach(btn => {
+        btn.addEventListener("click", () => {
+          const prod = PRODUCTS.find(x => x.id === btn.dataset.waOne);
+          const qty = quantities[prod.id];
+          const msg = `Hola, me gustaría cotizar ${qty} × ${prod.name} (${prod.id}) por ${formatMoney(qty * prod.price)} (IVA incl.) desde el Catálogo Digital.`;
+          window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
         });
       });
     }
 
     function updateCartUI() {
       const totalItems = cart.reduce((acc, item) => acc + item.qty, 0);
+      const total = cart.reduce((acc, item) => acc + item.qty * item.price, 0);
+
       document.getElementById("cartCount").textContent = totalItems;
+      document.getElementById("stickyCartCount").textContent = totalItems;
+
+      const statusEl = document.getElementById("stickyStatus");
+      if (totalItems === 0) {
+        statusEl.textContent = "Tu carrito está vacío. Ajusta la cantidad y pulsa Guardar en carrito.";
+      } else {
+        statusEl.textContent = `${totalItems} artículo(s) en carrito • Total (IVA incl.): ${formatMoney(total)}`;
+      }
 
       const listEl = document.getElementById("cartItems");
       if (cart.length === 0) {
@@ -439,14 +762,14 @@
       }
 
       listEl.innerHTML = cart.map((item, idx) => `
-        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);">
+        <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid var(--border);gap:8px;">
           <div>
             <div style="font-weight:700;font-size:0.9rem;">${item.id} - ${item.name}</div>
             <div style="font-size:0.8rem;color:var(--muted);">${item.qty} × ${formatMoney(item.price)}</div>
           </div>
           <div style="display:flex;align-items:center;gap:8px;">
             <span style="font-weight:700;">${formatMoney(item.qty * item.price)}</span>
-            <button class="qty-btn" data-rem="${idx}">×</button>
+            <button class="qty-btn" data-rem="${idx}" type="button">×</button>
           </div>
         </div>
       `).join("");
@@ -458,7 +781,6 @@
         });
       });
 
-      const total = cart.reduce((acc, item) => acc + item.qty * item.price, 0);
       const subtotal = total / 1.16;
       const iva = total - subtotal;
 
@@ -469,30 +791,28 @@
       `;
     }
 
-    document.getElementById("openCartBtn").addEventListener("click", () => {
-      document.getElementById("cartDrawer").classList.add("open");
-    });
+    function clearCart() {
+      cart.length = 0;
+      updateCartUI();
+    }
 
-    document.getElementById("closeCartBtn").addEventListener("click", () => {
-      document.getElementById("cartDrawer").classList.remove("open");
-    });
-
-    document.getElementById("searchInput").addEventListener("input", e => {
-      searchTerm = e.target.value;
-      renderProducts();
-    });
-
-    document.getElementById("sendOrderBtn").addEventListener("click", () => {
-      if (cart.length === 0) return;
-      const name = document.getElementById("buyerName").value.trim();
-      const phone = document.getElementById("buyerPhone").value.trim();
-      const email = document.getElementById("buyerEmail").value.trim();
-      if (!name || !phone) {
-        alert("Completa tu nombre/empresa y teléfono/WhatsApp.");
+    function sendCartWhatsApp() {
+      if (cart.length === 0) {
+        document.getElementById("cartDrawer").classList.add("open");
         return;
       }
 
-      const lines = cart.map(i => `• ${i.qty} x ${i.name} (${i.id}): ${formatMoney(i.qty * i.price)}`);
+      const name = document.getElementById("buyerName").value.trim();
+      const phone = document.getElementById("buyerPhone").value.trim();
+      const email = document.getElementById("buyerEmail").value.trim();
+
+      if (!name || !phone) {
+        document.getElementById("cartDrawer").classList.add("open");
+        alert("Completa tu nombre o empresa y tu teléfono/WhatsApp para enviar el pedido.");
+        return;
+      }
+
+      const lines = cart.map(i => `• ${i.qty} × ${i.name} (${i.id}): ${formatMoney(i.qty * i.price)}`);
       const total = cart.reduce((acc, i) => acc + i.qty * i.price, 0);
       const msg = [
         "Hola, me gustaría solicitar este pedido desde el Catálogo Digital:",
@@ -504,6 +824,40 @@
       ].filter(Boolean).join("\n");
 
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
+    }
+
+    document.getElementById("openCartBtn").addEventListener("click", () => {
+      document.getElementById("cartDrawer").classList.add("open");
+    });
+
+    document.getElementById("stickyOpenCart").addEventListener("click", () => {
+      document.getElementById("cartDrawer").classList.add("open");
+    });
+
+    document.getElementById("closeCartBtn").addEventListener("click", () => {
+      document.getElementById("cartDrawer").classList.remove("open");
+    });
+
+    document.getElementById("cartDrawer").addEventListener("click", e => {
+      if (e.target.id === "cartDrawer") e.currentTarget.classList.remove("open");
+    });
+
+    document.getElementById("closeModalBtn").addEventListener("click", () => {
+      document.getElementById("imgModal").classList.remove("open");
+    });
+
+    document.getElementById("imgModal").addEventListener("click", e => {
+      if (e.target.id === "imgModal") e.currentTarget.classList.remove("open");
+    });
+
+    document.getElementById("clearCartBtn").addEventListener("click", clearCart);
+    document.getElementById("drawerClearBtn").addEventListener("click", clearCart);
+    document.getElementById("sendOrderBtn").addEventListener("click", sendCartWhatsApp);
+    document.getElementById("stickyWaBtn").addEventListener("click", sendCartWhatsApp);
+
+    document.getElementById("searchInput").addEventListener("input", e => {
+      searchTerm = e.target.value;
+      renderProducts();
     });
 
     renderFilters();
