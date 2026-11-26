@@ -409,7 +409,7 @@
 
     .drawer {
       width: 100%;
-      max-width: 430px;
+      max-width: 440px;
       background: var(--surface);
       height: 100%;
       padding: 20px;
@@ -418,6 +418,16 @@
       flex-direction: column;
       gap: 14px;
       border-left: 1px solid var(--border);
+    }
+
+    .step-view {
+      display: none;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .step-view.active {
+      display: flex;
     }
 
     .field {
@@ -434,6 +444,38 @@
     .field:focus {
       outline: none;
       border-color: var(--accent);
+    }
+
+    .pay-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border-strong);
+      border-radius: 10px;
+      padding: 14px;
+      font-size: 0.88rem;
+      color: var(--muted);
+    }
+
+    .pay-box strong {
+      color: var(--text);
+    }
+
+    .bank-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 5px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .bank-row:last-of-type {
+      border-bottom: none;
+    }
+
+    .clabe-code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      color: #fdba74;
+      font-weight: 700;
+      word-break: break-all;
     }
 
     .summary-line {
@@ -552,8 +594,8 @@
         <button class="qty-btn" style="width:auto;padding:0 12px;" id="clearCartBtn" type="button">
           Vaciar
         </button>
-        <button class="btn-primary" style="width:auto;padding:8px 14px;" id="stickyWaBtn" type="button">
-          Cotizar por WhatsApp
+        <button class="btn-primary" style="width:auto;padding:8px 14px;" id="stickyNextBtn" type="button">
+          Siguiente
         </button>
       </div>
     </div>
@@ -562,22 +604,41 @@
   <div class="drawer-backdrop" id="cartDrawer">
     <div class="drawer">
       <div style="display:flex;justify-content:space-between;align-items:center;">
-        <h2>Tu Pedido</h2>
+        <h2 id="drawerTitle">Tu Pedido</h2>
         <button class="cart-btn" id="closeCartBtn" type="button">Cerrar</button>
       </div>
 
-      <div id="cartItems"></div>
+      <!-- Paso 1: Carrito y datos del comprador -->
+      <div class="step-view active" id="stepCart">
+        <div id="cartItems"></div>
 
-      <div>
-        <h3 style="margin-bottom:8px;font-size:0.95rem;">Datos del comprador</h3>
-        <input class="field" id="buyerName" placeholder="Nombre completo o empresa *" />
-        <input class="field" id="buyerPhone" placeholder="Teléfono / WhatsApp *" />
-        <input class="field" id="buyerEmail" placeholder="Correo electrónico (opcional)" />
+        <div>
+          <h3 style="margin-bottom:8px;font-size:0.95rem;">Datos del comprador</h3>
+          <input class="field" id="buyerName" placeholder="Nombre completo o empresa *" />
+          <input class="field" id="buyerPhone" placeholder="Teléfono / WhatsApp *" />
+          <input class="field" id="buyerEmail" placeholder="Correo electrónico (opcional)" />
+        </div>
+
+        <div id="cartSummary"></div>
+        <button class="btn-primary" id="nextToPaymentBtn" type="button">Siguiente</button>
+        <button class="btn-secondary" id="drawerClearBtn" type="button">Vaciar carrito</button>
       </div>
 
-      <div id="cartSummary"></div>
-      <button class="btn-primary" id="sendOrderBtn" type="button">Enviar pedido por WhatsApp</button>
-      <button class="btn-secondary" id="drawerClearBtn" type="button">Vaciar carrito</button>
+      <!-- Paso 2: Pantalla de pago -->
+      <div class="step-view" id="stepPayment">
+        <div id="paymentSummary"></div>
+
+        <div class="pay-box">
+          <div style="margin-bottom:8px;"><strong>Datos bancarios para transferencia / SPEI:</strong></div>
+          <div class="bank-row"><span>Titular:</span><strong>Rodrigo Ortega</strong></div>
+          <div class="bank-row"><span>Institución:</span><strong>Bankaool</strong></div>
+          <div class="bank-row"><span>Cuenta CLABE:</span><span class="clabe-code" id="clabeValue">147152000001605587</span></div>
+        </div>
+
+        <button class="btn-secondary" id="copyClabeBtn" type="button">Copiar Cuenta CLABE</button>
+        <button class="btn-primary" id="sendOrderBtn" type="button">Confirmar y enviar pedido por WhatsApp</button>
+        <button class="btn-secondary" id="backToCartBtn" type="button">Regresar al carrito</button>
+      </div>
     </div>
   </div>
 
@@ -595,6 +656,13 @@
 
   <script>
     const WHATSAPP_NUMBER = "5215547102129";
+
+    const BANK_DETAILS = {
+      holder: "Rodrigo Ortega",
+      institution: "Bankaool",
+      clabe: "147152000001605587"
+    };
+
     const PRODUCTS = [
       {
         id: "ACP2X16W",
@@ -649,15 +717,6 @@
         price: 460.00,
         note: "Por pieza",
         img: "img/WINCHER SOLDABLE.webp"
-      },
-      {
-        id: "EQUIPO-CARGA",
-        category: "Equipos y Herramental",
-        name: "Equipo / Herramental de Carga",
-        desc: "Solución especializada para manejo y aseguramiento de carga",
-        price: 1950.00,
-        note: "Consultar disponibilidad",
-        img: "img/Gemini_Generated_Image_jmsztljmsztljmsz.jpg"
       }
     ];
 
@@ -682,6 +741,24 @@
       box.classList.add("show");
       clearTimeout(showToast._t);
       showToast._t = setTimeout(() => box.classList.remove("show"), 1800);
+    }
+
+    function setDrawerStep(step) {
+      const isPay = step === "payment";
+      document.getElementById("stepCart").classList.toggle("active", !isPay);
+      document.getElementById("stepPayment").classList.toggle("active", isPay);
+      document.getElementById("drawerTitle").textContent = isPay ? "Pantalla de Pago" : "Tu Pedido";
+      if (isPay) renderPaymentStep();
+    }
+
+    function openDrawer(step = "cart") {
+      document.getElementById("cartDrawer").classList.add("open");
+      setDrawerStep(step);
+    }
+
+    function closeDrawer() {
+      document.getElementById("cartDrawer").classList.remove("open");
+      setDrawerStep("cart");
     }
 
     function renderFilters() {
@@ -847,24 +924,59 @@
       `;
     }
 
+    function renderPaymentStep() {
+      const name = document.getElementById("buyerName").value.trim();
+      const phone = document.getElementById("buyerPhone").value.trim();
+      const email = document.getElementById("buyerEmail").value.trim();
+      const total = cart.reduce((acc, i) => acc + i.qty * i.price, 0);
+      const subtotal = total / 1.16;
+      const iva = total - subtotal;
+
+      document.getElementById("paymentSummary").innerHTML = `
+        <div class="pay-box">
+          <div><strong>Cliente:</strong> ${name || "No especificado"}</div>
+          <div><strong>Teléfono / WhatsApp:</strong> ${phone || "No especificado"}</div>
+          ${email ? `<div><strong>Correo:</strong> ${email}</div>` : ""}
+          <div class="summary-line" style="margin-top:8px;"><span>Subtotal (sin IVA):</span><span>${formatMoney(subtotal)}</span></div>
+          <div class="summary-line"><span>IVA (16%):</span><span>${formatMoney(iva)}</span></div>
+          <div class="summary-line total-line"><span>Total a pagar:</span><span>${formatMoney(total)}</span></div>
+        </div>
+      `;
+    }
+
+    function handleNextStep() {
+      if (cart.length === 0) {
+        openDrawer("cart");
+        alert("Agrega al menos un producto al carrito antes de continuar.");
+        return;
+      }
+      const name = document.getElementById("buyerName").value.trim();
+      const phone = document.getElementById("buyerPhone").value.trim();
+      if (!name || !phone) {
+        openDrawer("cart");
+        alert("Completa tu nombre o empresa y tu teléfono/WhatsApp para pasar a la pantalla de pago.");
+        return;
+      }
+      openDrawer("payment");
+    }
+
     function clearCart() {
       cart.length = 0;
       updateCartUI();
+      setDrawerStep("cart");
     }
 
     function sendCartWhatsApp() {
       if (cart.length === 0) {
-        document.getElementById("cartDrawer").classList.add("open");
+        openDrawer("cart");
         return;
       }
-
       const name = document.getElementById("buyerName").value.trim();
       const phone = document.getElementById("buyerPhone").value.trim();
       const email = document.getElementById("buyerEmail").value.trim();
-
       if (!name || !phone) {
-        document.getElementById("cartDrawer").classList.add("open");
-        alert("Completa tu nombre o empresa y tu teléfono/WhatsApp para enviar el pedido.");
+        openDrawer("cart");
+        alert("Completa tu nombre o empresa y tu teléfono/WhatsApp.");
         return;
       }
 
@@ -876,27 +988,36 @@
         `Total (IVA incl.): ${formatMoney(total)}`,
         `Cliente: ${name}`,
         `Teléfono: ${phone}`,
-        email ? `Correo: ${email}` : ""
+        email ? `Correo: ${email}` : "",
+        `Pago SPEI/Transferencia -> Titular: ${BANK_DETAILS.holder} | Banco: ${BANK_DETAILS.institution} | CLABE: ${BANK_DETAILS.clabe}`
       ].filter(Boolean).join("\n");
 
       window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`, "_blank");
     }
 
-    document.getElementById("openCartBtn").addEventListener("click", () => {
-      document.getElementById("cartDrawer").classList.add("open");
+    document.getElementById("copyClabeBtn").addEventListener("click", () => {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(BANK_DETAILS.clabe).then(() => {
+          showToast("CLABE copiada al portapapeles");
+        }).catch(() => {
+          alert(`Cuenta CLABE: ${BANK_DETAILS.clabe}`);
+        });
+      } else {
+        alert(`Cuenta CLABE: ${BANK_DETAILS.clabe}`);
+      }
     });
 
-    document.getElementById("stickyOpenCart").addEventListener("click", () => {
-      document.getElementById("cartDrawer").classList.add("open");
-    });
-
-    document.getElementById("closeCartBtn").addEventListener("click", () => {
-      document.getElementById("cartDrawer").classList.remove("open");
-    });
+    document.getElementById("openCartBtn").addEventListener("click", () => openDrawer("cart"));
+    document.getElementById("stickyOpenCart").addEventListener("click", () => openDrawer("cart"));
+    document.getElementById("closeCartBtn").addEventListener("click", closeDrawer);
 
     document.getElementById("cartDrawer").addEventListener("click", e => {
-      if (e.target.id === "cartDrawer") e.currentTarget.classList.remove("open");
+      if (e.target.id === "cartDrawer") closeDrawer();
     });
+
+    document.getElementById("nextToPaymentBtn").addEventListener("click", handleNextStep);
+    document.getElementById("stickyNextBtn").addEventListener("click", handleNextStep);
+    document.getElementById("backToCartBtn").addEventListener("click", () => setDrawerStep("cart"));
 
     document.getElementById("closeModalBtn").addEventListener("click", () => {
       document.getElementById("imgModal").classList.remove("open");
@@ -909,7 +1030,6 @@
     document.getElementById("clearCartBtn").addEventListener("click", clearCart);
     document.getElementById("drawerClearBtn").addEventListener("click", clearCart);
     document.getElementById("sendOrderBtn").addEventListener("click", sendCartWhatsApp);
-    document.getElementById("stickyWaBtn").addEventListener("click", sendCartWhatsApp);
 
     document.getElementById("searchInput").addEventListener("input", e => {
       searchTerm = e.target.value;
