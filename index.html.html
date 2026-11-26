@@ -1,0 +1,1859 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Catálogo Virtual | Soluciones de Carga y Herramental</title>
+  <style>
+    :root {
+      --bg: #0b0f17;
+      --bg-grad: radial-gradient(circle at 15% 0%, rgba(249, 115, 22, 0.14) 0%, transparent 45%),
+                 radial-gradient(circle at 85% 8%, rgba(56, 189, 248, 0.10) 0%, transparent 40%),
+                 linear-gradient(180deg, #0c111a 0%, #090d14 100%);
+      --surface: #141b26;
+      --surface-2: #1c2534;
+      --surface-3: #243044;
+      --text: #f8fafc;
+      --muted: #9fb0c7;
+      --accent: #f97316;
+      --accent-2: #fb923c;
+      --accent-hover: #ea580c;
+      --border: rgba(148, 163, 184, 0.16);
+      --border-strong: rgba(249, 115, 22, 0.45);
+      --ok: #22c55e;
+      --danger: #ef4444;
+      --shadow-card: 0 12px 28px -8px rgba(0, 0, 0, 0.55), 0 0 0 1px var(--border);
+      --shadow-hover: 0 20px 36px -10px rgba(0, 0, 0, 0.72), 0 0 22px -6px rgba(249, 115, 22, 0.25);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-grad);
+      background-attachment: fixed;
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+      padding-bottom: 102px;
+    }
+
+    .top-accent-bar {
+      height: 3px;
+      background: linear-gradient(90deg, #ea580c, #fb923c, #38bdf8, #ea580c);
+    }
+
+    header {
+      background: rgba(15, 21, 32, 0.86);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      padding: 14px 20px;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .header-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .brand-logo {
+      height: 68px;
+      width: auto;
+      max-width: 155px;
+      object-fit: contain;
+      background: #ffffff;
+      padding: 5px 9px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+      cursor: zoom-in;
+      flex-shrink: 0;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .brand-logo:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 20px rgba(249, 115, 22, 0.28);
+    }
+
+    .brand h1 {
+      font-size: 1.38rem;
+      font-weight: 850;
+      letter-spacing: 0.4px;
+      text-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .brand h1 span {
+      background: linear-gradient(90deg, #f97316, #fbbf24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 8px;
+      margin-top: 3px;
+    }
+
+    .brand p {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+
+    .wa-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #86efac;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      padding: 2px 9px;
+      border-radius: 999px;
+    }
+
+    .controls {
+      max-width: 1180px;
+      margin: 24px auto 0;
+      padding: 14px 18px;
+      background: rgba(20, 27, 38, 0.78);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .filter-btn {
+      background: var(--surface-2);
+      color: var(--muted);
+      border: 1px solid var(--border);
+      padding: 8px 15px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-size: 0.88rem;
+      font-weight: 700;
+      transition: all 0.18s ease;
+    }
+
+    .filter-btn:hover {
+      color: var(--text);
+      border-color: rgba(249, 115, 22, 0.5);
+      background: var(--surface-3);
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: #fff;
+      border-color: transparent;
+      box-shadow: 0 4px 14px rgba(249, 115, 22, 0.35);
+    }
+
+    .search-box input {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 9px 14px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      min-width: 250px;
+      outline: none;
+      transition: border-color 0.18s, box-shadow 0.18s;
+    }
+
+    .search-box input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.18);
+    }
+
+    .grid {
+      max-width: 1180px;
+      margin: 22px auto 0;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(315px, 1fr));
+      gap: 22px;
+    }
+
+    .card {
+      background: linear-gradient(180deg, #17202e 0%, #121823 100%);
+      border-radius: 16px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: var(--shadow-card);
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    .card-media {
+      background: linear-gradient(145deg, #1e293b 0%, #141c28 100%);
+      height: 210px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px;
+      border-bottom: 1px solid var(--border);
+      overflow: hidden;
+      cursor: zoom-in;
+      position: relative;
+    }
+
+    .card-media img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 10px;
+      transition: transform 0.28s ease;
+    }
+
+    .card:hover .card-media img {
+      transform: scale(1.04);
+    }
+
+    .zoom-tag {
+      position: absolute;
+      bottom: 18px;
+      right: 18px;
+      background: rgba(11, 15, 23, 0.82);
+      backdrop-filter: blur(6px);
+      color: #f8fafc;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      font-size: 0.74rem;
+      font-weight: 700;
+      padding: 4px 9px;
+      border-radius: 999px;
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .card-body {
+      padding: 18px 18px 12px;
+      flex: 1;
+    }
+
+    .card-top-meta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .badge {
+      display: inline-block;
+      font-size: 0.72rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #fdba74;
+      background: rgba(249, 115, 22, 0.15);
+      border: 1px solid rgba(249, 115, 22, 0.35);
+      padding: 3px 10px;
+      border-radius: 999px;
+    }
+
+    .sku {
+      font-size: 0.78rem;
+      color: var(--muted);
+      font-weight: 700;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      padding: 2px 8px;
+      border-radius: 6px;
+    }
+
+    .card-title {
+      font-size: 1.1rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+      color: #ffffff;
+    }
+
+    .specs {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-bottom: 14px;
+    }
+
+    .price-box {
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.08) 0%, rgba(28, 37, 52, 0.95) 65%);
+      border: 1px solid rgba(249, 115, 22, 0.22);
+      border-radius: 12px;
+      padding: 11px 14px;
+      margin-bottom: 6px;
+    }
+
+    .price-main {
+      font-size: 1.35rem;
+      font-weight: 850;
+      color: #fff;
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+    }
+
+    .iva-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #fdba74;
+      background: rgba(249, 115, 22, 0.14);
+      padding: 1px 6px;
+      border-radius: 5px;
+    }
+
+    .price-sub {
+      font-size: 0.82rem;
+      color: var(--ok);
+      font-weight: 600;
+      margin-top: 2px;
+    }
+
+    .card-actions {
+      padding: 6px 18px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .save-row {
+      display: flex;
+      align-items: stretch;
+      gap: 8px;
+    }
+
+    .stepper {
+      display: inline-flex;
+      align-items: center;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 11px;
+      padding: 3px;
+      flex-shrink: 0;
+    }
+
+    .stepper-btn {
+      width: 32px;
+      height: 36px;
+      border: none;
+      border-radius: 8px;
+      background: var(--surface-3);
+      color: var(--text);
+      font-size: 1.15rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.15s, transform 0.1s;
+      user-select: none;
+    }
+
+    .stepper-btn:hover {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .stepper-btn:active {
+      transform: scale(0.92);
+    }
+
+    .stepper-input {
+      width: 42px;
+      border: none;
+      background: transparent;
+      color: #fff;
+      font-size: 0.98rem;
+      font-weight: 800;
+      text-align: center;
+      outline: none;
+      -moz-appearance: textfield;
+    }
+
+    .stepper-input::-webkit-outer-spin-button,
+    .stepper-input::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    .in-cart-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.78rem;
+      color: #bbf7d0;
+      background: rgba(34, 197, 94, 0.12);
+      border: 1px solid rgba(34, 197, 94, 0.32);
+      border-radius: 8px;
+      padding: 5px 10px;
+      font-weight: 700;
+    }
+
+    .btn {
+      border: none;
+      border-radius: 11px;
+      padding: 10px 14px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.18s ease;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #f97316 0%, #ea580c 100%);
+      color: #fff;
+      width: 100%;
+      box-shadow: 0 6px 16px rgba(249, 115, 22, 0.28);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #fb923c 0%, #f97316 100%);
+      box-shadow: 0 8px 20px rgba(249, 115, 22, 0.42);
+      transform: translateY(-1px);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+      color: #fff;
+      box-shadow: 0 6px 16px rgba(22, 163, 74, 0.28);
+    }
+
+    .btn-success:hover {
+      background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    }
+
+    .btn-save {
+      flex: 1;
+      background: linear-gradient(135deg, #253247 0%, #1a2332 100%);
+      color: var(--text);
+      border: 1px solid rgba(148, 163, 184, 0.25);
+      flex-direction: column;
+      line-height: 1.22;
+      padding: 7px 10px;
+    }
+
+    .btn-save:hover {
+      border-color: var(--accent);
+      background: linear-gradient(135deg, #2e3d56 0%, #202b3d 100%);
+    }
+
+    .btn-save .btn-save-main {
+      font-size: 0.86rem;
+      font-weight: 700;
+    }
+
+    .btn-save .btn-save-sub {
+      font-size: 0.75rem;
+      color: #fb923c;
+      font-weight: 700;
+    }
+
+    .btn-save.just-added {
+      background: rgba(34, 197, 94, 0.22);
+      border-color: var(--ok);
+      color: #dcfce7;
+    }
+
+    .btn-save.just-added .btn-save-sub {
+      color: #86efac;
+    }
+
+    .btn-secondary {
+      background: var(--surface-2);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      background: var(--surface-3);
+    }
+
+    .btn-danger {
+      background: rgba(239, 68, 68, 0.14);
+      color: #fca5a5;
+      border: 1px solid rgba(239, 68, 68, 0.35);
+    }
+
+    .btn-danger:hover {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    @keyframes popPulse {
+      0% { transform: scale(1); }
+      45% { transform: scale(1.08); }
+      100% { transform: scale(1); }
+    }
+
+    .pulse-cart {
+      animation: popPulse 0.32s ease;
+      border-color: var(--ok) !important;
+    }
+
+    .quote-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(14, 20, 30, 0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-top: 1px solid var(--border);
+      padding: 12px 20px;
+      z-index: 30;
+      box-shadow: 0 -10px 28px rgba(0, 0, 0, 0.45);
+    }
+
+    .quote-bar-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .quote-summary {
+      font-size: 0.92rem;
+    }
+
+    .quote-summary strong {
+      color: #fb923c;
+    }
+
+    .quote-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .quote-buttons .btn-primary {
+      width: auto;
+      min-width: 155px;
+    }
+
+    .cart-drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 9, 14, 0.82);
+      backdrop-filter: blur(4px);
+      display: none;
+      justify-content: flex-end;
+      z-index: 50;
+    }
+
+    .cart-drawer-backdrop.open {
+      display: flex;
+    }
+
+    .cart-drawer {
+      background: var(--surface);
+      border-left: 1px solid var(--border);
+      width: 100%;
+      max-width: 465px;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: -12px 0 36px rgba(0, 0, 0, 0.65);
+    }
+
+    .cart-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .cart-header h2 {
+      font-size: 1.12rem;
+      font-weight: 800;
+    }
+
+    .close-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      font-size: 1.15rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .close-btn:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .cart-scroll {
+      padding: 14px 20px;
+      overflow-y: auto;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .cart-items {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cart-empty {
+      color: var(--muted);
+      text-align: center;
+      padding: 24px 12px;
+      font-size: 0.92rem;
+      background: var(--surface-2);
+      border: 1px dashed var(--border);
+      border-radius: 12px;
+    }
+
+    .cart-item {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 11px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .cart-item-top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .cart-item-title {
+      font-weight: 700;
+      font-size: 0.94rem;
+    }
+
+    .cart-item-sub {
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .cart-item-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .qty-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .qty-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 7px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .qty-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .qty-value {
+      min-width: 24px;
+      text-align: center;
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .form-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 9px;
+    }
+
+    .form-box.card-box {
+      background: linear-gradient(135deg, rgba(249, 115, 22, 0.09) 0%, rgba(28, 37, 52, 0.96) 75%);
+      border-color: rgba(249, 115, 22, 0.32);
+    }
+
+    .form-box-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .form-box-title {
+      font-size: 0.84rem;
+      font-weight: 800;
+      color: #ffffff;
+    }
+
+    .card-badges {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #fdba74;
+      background: rgba(249, 115, 22, 0.14);
+      padding: 2px 8px;
+      border-radius: 999px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .form-input {
+      width: 100%;
+      background: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 8px 10px;
+      font-size: 0.84rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .form-input:focus {
+      border-color: var(--accent);
+    }
+
+    .form-input.full {
+      grid-column: 1 / -1;
+    }
+
+    .form-input.mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      letter-spacing: 0.4px;
+    }
+
+    .invoice-notice {
+      background: rgba(56, 189, 248, 0.1);
+      border: 1px solid rgba(56, 189, 248, 0.32);
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 0.8rem;
+      color: #bae6fd;
+      line-height: 1.4;
+    }
+
+    .form-error {
+      font-size: 0.8rem;
+      color: #fca5a5;
+      font-weight: 700;
+      display: none;
+    }
+
+    .form-error.visible {
+      display: block;
+    }
+
+    .cart-footer {
+      padding: 14px 20px;
+      border-top: 1px solid var(--border);
+      background: #0f1520;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .cart-breakdown {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 5px;
+      font-size: 0.88rem;
+    }
+
+    .cart-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+    }
+
+    .cart-row span:last-child {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .cart-total-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 1.02rem;
+      font-weight: 800;
+      padding-top: 6px;
+      border-top: 1px dashed var(--border);
+      color: var(--text);
+    }
+
+    .cart-total-row span:last-child {
+      color: #fb923c;
+      font-size: 1.2rem;
+    }
+
+    .iva-note {
+      font-size: 0.78rem;
+      color: var(--ok);
+      font-weight: 600;
+    }
+
+    .cart-footer-actions {
+      display: flex;
+      gap: 10px;
+    }
+
+    .cart-footer-actions .btn-success {
+      flex: 1;
+    }
+
+    .confirm-modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(5, 8, 13, 0.88);
+      backdrop-filter: blur(5px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+      z-index: 70;
+    }
+
+    .confirm-modal-backdrop.open {
+      display: flex;
+    }
+
+    .confirm-modal {
+      background: var(--surface);
+      border: 1px solid rgba(249, 115, 22, 0.4);
+      border-radius: 16px;
+      max-width: 540px;
+      width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      padding: 20px;
+      box-shadow: 0 24px 54px rgba(0, 0, 0, 0.8);
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .confirm-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 12px;
+    }
+
+    .confirm-folio {
+      font-size: 0.8rem;
+      font-weight: 800;
+      color: #86efac;
+      background: rgba(34, 197, 94, 0.14);
+      border: 1px solid rgba(34, 197, 94, 0.35);
+      padding: 3px 9px;
+      border-radius: 999px;
+      display: inline-block;
+      margin-bottom: 4px;
+    }
+
+    .auto-mail-status {
+      font-size: 0.84rem;
+      font-weight: 700;
+      padding: 9px 12px;
+      border-radius: 10px;
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    .auto-mail-status.ok {
+      border-color: rgba(34, 197, 94, 0.4);
+      background: rgba(34, 197, 94, 0.12);
+      color: #86efac;
+    }
+
+    .auto-mail-status.warn {
+      border-color: rgba(249, 115, 22, 0.4);
+      background: rgba(249, 115, 22, 0.12);
+      color: #fdba74;
+    }
+
+    .confirm-summary-box {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 12px;
+      font-size: 0.86rem;
+      white-space: pre-line;
+      color: #e2e8f0;
+    }
+
+    .confirm-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .confirm-actions .btn {
+      flex: 1;
+      min-width: 150px;
+    }
+
+    .lightbox {
+      position: fixed;
+      inset: 0;
+      background: rgba(6, 9, 14, 0.92);
+      backdrop-filter: blur(6px);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+      z-index: 60;
+    }
+
+    .lightbox.open {
+      display: flex;
+    }
+
+    .lightbox-content {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      max-width: 820px;
+      width: 100%;
+      padding: 18px;
+      position: relative;
+      text-align: center;
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.75);
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      color: var(--text);
+      font-size: 1.2rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .lightbox-close:hover {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+
+    .lightbox-content img {
+      max-width: 100%;
+      max-height: 70vh;
+      object-fit: contain;
+      border-radius: 10px;
+      background: #ffffff;
+      padding: 8px;
+      margin-top: 8px;
+    }
+
+    .lightbox-caption {
+      margin-top: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .lightbox-sub {
+      color: var(--muted);
+      font-size: 0.88rem;
+      margin-top: 4px;
+    }
+
+    @media (max-width: 520px) {
+      .form-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="top-accent-bar"></div>
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <img
+          src="img/Gemini_Generated_Image_jmsztljmsztljmsz.jpg"
+          alt="Logo Soluciones de Carga y Herramental"
+          class="brand-logo"
+          onclick="openCustomLightbox('img/Gemini_Generated_Image_jmsztljmsztljmsz.jpg', 'Soluciones de Carga y Herramental', 'Logotipo oficial · Cotización directa por WhatsApp: 55 4710 2129')"
+          title="Clic para ampliar logo"
+        />
+        <div>
+          <h1>SOLUCIONES DE <span>CARGA Y HERRAMENTAL</span></h1>
+          <div class="brand-meta">
+            <p>Catálogo virtual de sujeción y arrastre</p>
+            <span class="wa-pill">● WhatsApp: 55 4710 2129</span>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-secondary" id="openCartTopBtn" type="button">
+        🛒 Carrito (<span id="topCartCount">0</span>)
+      </button>
+    </div>
+  </header>
+
+  <section class="controls">
+    <div class="filters">
+      <button class="filter-btn active" data-category="todos">Todos los productos</button>
+      <button class="filter-btn" data-category="bandas">Bandas de Sujeción</button>
+      <button class="filter-btn" data-category="cadenas">Cadenas y Herrajes</button>
+    </div>
+    <div class="search-box">
+      <input id="searchInput" type="text" placeholder="Buscar por código, medida o producto..." />
+    </div>
+  </section>
+
+  <main class="grid" id="catalogGrid"></main>
+
+  <div class="quote-bar">
+    <div class="quote-bar-inner">
+      <div class="quote-summary" id="quoteSummary">
+        Tu carrito está vacío. Ajusta la cantidad y pulsa <strong>Guardar en carrito</strong>.
+      </div>
+      <div class="quote-buttons">
+        <button class="btn btn-secondary" id="openCartBottomBtn" type="button">
+          Ver carrito (<span id="bottomCartCount">0</span>)
+        </button>
+        <button class="btn btn-secondary" id="clearQuoteBtn" type="button">Vaciar</button>
+        <a class="btn btn-primary" id="whatsappQuoteLink" href="https://wa.me/5215547102129" target="_blank" rel="noopener">
+          Cotizar por WhatsApp
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <div class="cart-drawer-backdrop" id="cartBackdrop" aria-hidden="true">
+    <aside class="cart-drawer" role="dialog" aria-modal="true" aria-label="Carrito y datos de tarjeta">
+      <div class="cart-header">
+        <h2>Carrito y Pago con Tarjeta</h2>
+        <button class="close-btn" id="closeCartBtn" type="button" aria-label="Cerrar carrito">×</button>
+      </div>
+
+      <div class="cart-scroll">
+        <div class="cart-items" id="cartItemsContainer"></div>
+
+        <div class="form-box">
+          <div class="form-box-header">
+            <span class="form-box-title">📋 Datos del comprador</span>
+          </div>
+          <div class="form-grid">
+            <input type="text" id="buyerName" class="form-input" placeholder="Nombre completo o empresa *" />
+            <input type="tel" id="buyerPhone" class="form-input" placeholder="Teléfono / WhatsApp *" />
+            <input type="email" id="buyerEmail" class="form-input full" placeholder="Correo electrónico (opcional)" />
+          </div>
+        </div>
+
+        <div class="form-box card-box">
+          <div class="form-box-header">
+            <span class="form-box-title">💳 Datos de tarjeta para continuar compra</span>
+            <span class="card-badges">Débito / Crédito</span>
+          </div>
+          <div class="form-grid">
+            <input
+              type="text"
+              id="cardHolder"
+              class="form-input full"
+              placeholder="Nombre como aparece en la tarjeta *"
+              autocomplete="cc-name"
+            />
+            <input
+              type="text"
+              id="cardNumber"
+              class="form-input full mono"
+              placeholder="Número de tarjeta (16 dígitos) *"
+              inputmode="numeric"
+              maxlength="19"
+              autocomplete="cc-number"
+              oninput="formatCardNumberInput(this)"
+            />
+            <input
+              type="text"
+              id="cardExpiry"
+              class="form-input mono"
+              placeholder="Vigencia MM/AA *"
+              inputmode="numeric"
+              maxlength="5"
+              autocomplete="cc-exp"
+              oninput="formatExpiryInput(this)"
+            />
+            <input
+              type="password"
+              id="cardCvv"
+              class="form-input mono"
+              placeholder="CVV (3 o 4 dígitos) *"
+              inputmode="numeric"
+              maxlength="4"
+              autocomplete="cc-csc"
+              oninput="formatCvvInput(this)"
+            />
+            <input
+              type="text"
+              id="cardZip"
+              class="form-input full mono"
+              placeholder="Código postal de facturación / tarjeta *"
+              inputmode="numeric"
+              maxlength="5"
+              oninput="formatZipInput(this)"
+            />
+          </div>
+          <div class="form-error" id="checkoutError"></div>
+        </div>
+
+        <div class="invoice-notice">
+          <strong>Factura:</strong> Si requiere factura favor de mandar su constancia por WhatsApp o correo.
+        </div>
+      </div>
+
+      <div class="cart-footer">
+        <div class="cart-breakdown">
+          <div class="cart-row">
+            <span>Subtotal (sin IVA):</span>
+            <span id="cartSubtotalAmount">$0.00</span>
+          </div>
+          <div class="cart-row">
+            <span>IVA (16% ya incluido):</span>
+            <span id="cartIvaAmount">$0.00</span>
+          </div>
+          <div class="cart-total-row">
+            <span>Total a pagar (IVA incl.):</span>
+            <span id="cartTotalAmount">$0.00</span>
+          </div>
+          <div class="iva-note">✓ Los precios mostrados ya contienen IVA (16%).</div>
+        </div>
+        <div class="cart-footer-actions">
+          <button class="btn btn-secondary" id="drawerClearBtn" type="button">Vaciar</button>
+          <button class="btn btn-success" id="confirmOrderBtn" type="button">
+            ✓ Comprar
+          </button>
+        </div>
+      </div>
+    </aside>
+  </div>
+
+  <div class="confirm-modal-backdrop" id="confirmBackdrop" aria-hidden="true">
+    <div class="confirm-modal" role="dialog" aria-modal="true" aria-label="Notificación de compra">
+      <div class="confirm-head">
+        <div>
+          <span class="confirm-folio" id="confirmFolioBadge">FOLIO #SCH-0000</span>
+          <h3>Compra Registrada y Notificación Lista</h3>
+          <p style="color: var(--muted); font-size: 0.84rem;">
+            Correo: <strong>rodrigoortega87@gmail.com</strong> · WhatsApp: <strong>55 4710 2129</strong>
+          </p>
+        </div>
+        <button class="close-btn" id="closeConfirmBtn" type="button" aria-label="Cerrar confirmación">×</button>
+      </div>
+
+      <div class="auto-mail-status" id="autoMailStatus">Enviando notificación a rodrigoortega87@gmail.com...</div>
+
+      <div class="confirm-summary-box" id="confirmSummaryText"></div>
+
+      <div class="confirm-actions">
+        <a class="btn btn-secondary" id="sendEmailConfirmBtn" href="mailto:rodrigoortega87@gmail.com">
+          ✉️ Notificar por Correo
+        </a>
+        <a class="btn btn-success" id="sendWhatsappConfirmBtn" href="https://wa.me/5215547102129" target="_blank" rel="noopener">
+          💬 Notificar por WhatsApp
+        </a>
+      </div>
+
+      <button class="btn btn-secondary" type="button" id="copyFullOrderBtn" onclick="copyOrderSummary()">
+        📋 Copiar resumen completo
+      </button>
+    </div>
+  </div>
+
+  <div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Vista ampliada de producto">
+    <div class="lightbox-content">
+      <button class="lightbox-close" id="lightboxClose" type="button" aria-label="Cerrar">×</button>
+      <img id="lightboxImg" src="" alt="" />
+      <div class="lightbox-caption" id="lightboxTitle"></div>
+      <div class="lightbox-sub" id="lightboxSpecs"></div>
+    </div>
+  </div>
+
+  <script>
+    const PHONE = "5215547102129";
+    const ORDER_EMAIL = "rodrigoortega87@gmail.com";
+    const IVA_RATE = 0.16;
+    const INVOICE_LEGEND = "Si requiere factura favor de mandar su constancia por WhatsApp o correo.";
+
+    const products = [
+      {
+        id: "acp2x16w",
+        sku: "ACP2x16W",
+        category: "bandas",
+        name: "Banda para Riel Logístico",
+        specs: "Medidas: 4.8 metros de largo x 2\" de ancho · Promoción: Caja con 20 piezas.",
+        price: 2500,
+        unitLabel: "Caja con 20 piezas",
+        piecesPerUnit: 20,
+        image: "img/ACP2X16W.jpg"
+      },
+      {
+        id: "acp2x30g",
+        sku: "ACP2X30G",
+        category: "bandas",
+        name: "Banda con Gancho de Garfio",
+        specs: "Medidas: 9 metros de largo x 2\" de ancho · Promoción: Caja con 10 piezas.",
+        price: 2600,
+        unitLabel: "Caja con 10 piezas",
+        piecesPerUnit: 10,
+        image: "img/ACP2X30G.jpg"
+      },
+      {
+        id: "cadena-g70-6m",
+        sku: "CAD-G70-6M",
+        category: "cadenas",
+        name: "Cadena de Arrastre Grado 70",
+        specs: "6 metros de largo con ganchos 5/16\".",
+        price: 1220,
+        unitLabel: "Por pieza",
+        piecesPerUnit: 1,
+        image: "img/CADENA DE ARRASTRE.webp"
+      },
+      {
+        id: "wincher-atornillable-4",
+        sku: "WIN-AT-4",
+        category: "cadenas",
+        name: "Wincher Atornillable para Banda de 4\"",
+        specs: "Montaje atornillable para banda de 4\" de ancho.",
+        price: 380,
+        unitLabel: "Por pieza",
+        piecesPerUnit: 1,
+        image: "img/WINCHER ATORNILLABLE.jpg"
+      },
+      {
+        id: "banda-4-plano-9m",
+        sku: "B4-GP-9M",
+        category: "bandas",
+        name: "Banda de 4\" Gancho Plano 9 Metros de Largo",
+        specs: "Ancho de 4\" · Largo de 9 metros · Caja con 10 piezas.",
+        price: 2700,
+        unitLabel: "Caja con 10 piezas",
+        piecesPerUnit: 10,
+        image: "img/ACP4X30 O 40.webp"
+      },
+      {
+        id: "banda-4-plano-12m",
+        sku: "B4-GP-12M",
+        category: "bandas",
+        name: "Banda de 4\" Gancho Plano 12 Metros de Largo",
+        specs: "Ancho de 4\" · Largo de 12 metros · Caja con 10 piezas.",
+        price: 3000,
+        unitLabel: "Caja con 10 piezas",
+        piecesPerUnit: 10,
+        image: "img/ACP4X30 O 40.webp"
+      },
+      {
+        id: "wincher-soldable-4",
+        sku: "WIN-SL-4",
+        category: "cadenas",
+        name: "Wincher Soldable para Banda de 4\"",
+        specs: "Montaje soldable para banda de 4\" de ancho.",
+        price: 380,
+        unitLabel: "Por pieza",
+        piecesPerUnit: 1,
+        image: "img/WINCHER SOLDABLE.webp"
+      }
+    ];
+
+    const cart = {};
+    const draftQty = {};
+    let activeCategory = "todos";
+    let searchQuery = "";
+    let currentOrderText = "";
+
+    const formatMoney = (amount) =>
+      new Intl.NumberFormat("es-MX", {
+        style: "currency",
+        currency: "MXN",
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      }).format(amount);
+
+    function formatCardNumberInput(input) {
+      const digits = input.value.replace(/\D/g, "").slice(0, 16);
+      const groups = digits.match(/.{1,4}/g);
+      input.value = groups ? groups.join(" ") : "";
+    }
+
+    function formatExpiryInput(input) {
+      const digits = input.value.replace(/\D/g, "").slice(0, 4);
+      if (digits.length >= 3) {
+        input.value = `${digits.slice(0, 2)}/${digits.slice(2)}`;
+      } else {
+        input.value = digits;
+      }
+    }
+
+    function formatCvvInput(input) {
+      input.value = input.value.replace(/\D/g, "").slice(0, 4);
+    }
+
+    function formatZipInput(input) {
+      input.value = input.value.replace(/\D/g, "").slice(0, 5);
+    }
+
+    function showCheckoutError(msg) {
+      const el = document.getElementById("checkoutError");
+      el.textContent = msg;
+      el.classList.add("visible");
+    }
+
+    function clearCheckoutError() {
+      const el = document.getElementById("checkoutError");
+      el.textContent = "";
+      el.classList.remove("visible");
+    }
+
+    function getDraftQty(id) {
+      return draftQty[id] && draftQty[id] >= 1 ? draftQty[id] : 1;
+    }
+
+    function updateCardLivePreview(id) {
+      const prod = products.find((item) => item.id === id);
+      if (!prod) return;
+      const qty = getDraftQty(id);
+
+      const inputEl = document.getElementById(`qty-input-${id}`);
+      if (inputEl) inputEl.value = qty;
+
+      const subEl = document.getElementById(`save-sub-${id}`);
+      if (subEl) subEl.textContent = `${qty} × ${formatMoney(prod.price)} = ${formatMoney(prod.price * qty)}`;
+
+      const waEl = document.getElementById(`wa-direct-${id}`);
+      if (waEl) {
+        const msg =
+          `Hola Soluciones de Carga y Herramental, me interesa cotizar / comprar:\n` +
+          `- ${qty} x ${prod.sku} (${prod.name}, ${prod.unitLabel}): ${formatMoney(prod.price * qty)} (IVA incl.)\n\n` +
+          `${INVOICE_LEGEND}`;
+        waEl.href = `https://wa.me/${PHONE}?text=${encodeURIComponent(msg)}`;
+      }
+    }
+
+    function stepDraftQty(id, delta) {
+      const next = Math.max(1, getDraftQty(id) + delta);
+      draftQty[id] = next;
+      updateCardLivePreview(id);
+    }
+
+    function setDraftQty(id, value) {
+      const parsed = parseInt(value, 10);
+      draftQty[id] = Number.isNaN(parsed) || parsed < 1 ? 1 : parsed;
+      updateCardLivePreview(id);
+    }
+
+    function openCustomLightbox(src, title, specs) {
+      document.getElementById("lightboxImg").src = encodeURI(src);
+      document.getElementById("lightboxImg").alt = title;
+      document.getElementById("lightboxTitle").textContent = title;
+      document.getElementById("lightboxSpecs").textContent = specs;
+      document.getElementById("lightbox").classList.add("open");
+    }
+
+    function openLightbox(id) {
+      const prod = products.find((item) => item.id === id);
+      if (!prod) return;
+      openCustomLightbox(prod.image, `${prod.sku} · ${prod.name}`, prod.specs);
+    }
+
+    function closeLightbox() {
+      document.getElementById("lightbox").classList.remove("open");
+    }
+
+    function openCart() {
+      clearCheckoutError();
+      renderCartDrawer();
+      document.getElementById("cartBackdrop").classList.add("open");
+    }
+
+    function closeCart() {
+      document.getElementById("cartBackdrop").classList.remove("open");
+    }
+
+    function openConfirmModal() {
+      document.getElementById("confirmBackdrop").classList.add("open");
+    }
+
+    function closeConfirmModal() {
+      document.getElementById("confirmBackdrop").classList.remove("open");
+    }
+
+    function copyOrderSummary() {
+      if (!currentOrderText) return;
+      navigator.clipboard?.writeText(currentOrderText).then(() => {
+        const btn = document.getElementById("copyFullOrderBtn");
+        const old = btn.textContent;
+        btn.textContent = "✓ Resumen copiado";
+        setTimeout(() => (btn.textContent = old), 1400);
+      });
+    }
+
+    function pulseCartButtons() {
+      ["openCartTopBtn", "openCartBottomBtn"].forEach((btnId) => {
+        const el = document.getElementById(btnId);
+        if (!el) return;
+        el.classList.remove("pulse-cart");
+        void el.offsetWidth;
+        el.classList.add("pulse-cart");
+      });
+    }
+
+    function saveToCart(id) {
+      const qtyToAdd = getDraftQty(id);
+      cart[id] = (cart[id] || 0) + qtyToAdd;
+      renderCatalog();
+      updateCartUI();
+      pulseCartButtons();
+
+      const btn = document.getElementById(`save-btn-${id}`);
+      const mainText = document.getElementById(`save-main-${id}`);
+      if (btn && mainText) {
+        btn.classList.add("just-added");
+        mainText.textContent = `✓ ¡Agregado (+${qtyToAdd})!`;
+        setTimeout(() => {
+          btn.classList.remove("just-added");
+          mainText.textContent = "Guardar en carrito";
+        }, 1100);
+      }
+    }
+
+    function changeCartQty(id, delta) {
+      const nextQty = (cart[id] || 0) + delta;
+      if (nextQty <= 0) {
+        delete cart[id];
+      } else {
+        cart[id] = nextQty;
+      }
+      renderCatalog();
+      updateCartUI();
+    }
+
+    function removeFromCart(id) {
+      delete cart[id];
+      renderCatalog();
+      updateCartUI();
+    }
+
+    function clearCart() {
+      Object.keys(cart).forEach((k) => delete cart[k]);
+      renderCatalog();
+      updateCartUI();
+    }
+
+    function renderCatalog() {
+      const grid = document.getElementById("catalogGrid");
+      const filtered = products.filter((p) => {
+        const matchesCat = activeCategory === "todos" || p.category === activeCategory;
+        const text = `${p.sku} ${p.name} ${p.specs}`.toLowerCase();
+        const matchesSearch = text.includes(searchQuery.toLowerCase());
+        return matchesCat && matchesSearch;
+      });
+
+      grid.innerHTML = filtered
+        .map((p) => {
+          const qtyInCart = cart[p.id] || 0;
+          const currentDraft = getDraftQty(p.id);
+          const perPiece = p.piecesPerUnit > 1 ? ` (${formatMoney(p.price / p.piecesPerUnit)} c/u)` : "";
+          const directMsg =
+            `Hola Soluciones de Carga y Herramental, me interesa cotizar / comprar:\n` +
+            `- ${currentDraft} x ${p.sku} (${p.name}, ${p.unitLabel}): ${formatMoney(p.price * currentDraft)} (IVA incl.)\n\n` +
+            `${INVOICE_LEGEND}`;
+          const directUrl = `https://wa.me/${PHONE}?text=${encodeURIComponent(directMsg)}`;
+
+          const inCartBanner =
+            qtyInCart > 0
+              ? `<div class="in-cart-pill"><span>✓ Ya tienes ${qtyInCart} en tu carrito</span><span>${formatMoney(p.price * qtyInCart)}</span></div>`
+              : "";
+
+          return `
+            <article class="card">
+              <div class="card-media" onclick="openLightbox('${p.id}')" title="Clic para ampliar imagen">
+                <img src="${encodeURI(p.image)}" alt="${p.name}" loading="lazy" />
+                <span class="zoom-tag">🔍 Ampliar</span>
+              </div>
+              <div class="card-body">
+                <div class="card-top-meta">
+                  <span class="badge">${p.category === "bandas" ? "Bandas de Sujeción" : "Cadenas y Herrajes"}</span>
+                  <span class="sku">${p.sku}</span>
+                </div>
+                <h2 class="card-title">${p.name}</h2>
+                <p class="specs">${p.specs}</p>
+                <div class="price-box">
+                  <div class="price-main">${formatMoney(p.price)} <span class="iva-tag">IVA incl.</span></div>
+                  <div class="price-sub">${p.unitLabel}${perPiece}</div>
+                </div>
+              </div>
+              <div class="card-actions">
+                ${inCartBanner}
+                <div class="save-row">
+                  <div class="stepper" aria-label="Selector de cantidad">
+                    <button class="stepper-btn" type="button" onclick="stepDraftQty('${p.id}', -1)" aria-label="Restar cantidad">−</button>
+                    <input
+                      id="qty-input-${p.id}"
+                      type="number"
+                      min="1"
+                      value="${currentDraft}"
+                      class="stepper-input"
+                      aria-label="Cantidad a guardar"
+                      oninput="setDraftQty('${p.id}', this.value)"
+                    />
+                    <button class="stepper-btn" type="button" onclick="stepDraftQty('${p.id}', 1)" aria-label="Sumar cantidad">+</button>
+                  </div>
+                  <button id="save-btn-${p.id}" class="btn btn-save" type="button" onclick="saveToCart('${p.id}')">
+                    <span id="save-main-${p.id}" class="btn-save-main">Guardar en carrito</span>
+                    <span id="save-sub-${p.id}" class="btn-save-sub">${currentDraft} × ${formatMoney(p.price)} = ${formatMoney(p.price * currentDraft)}</span>
+                  </button>
+                </div>
+                <a id="wa-direct-${p.id}" class="btn btn-primary" href="${directUrl}" target="_blank" rel="noopener">Cotizar por WhatsApp</a>
+              </div>
+            </article>
+          `;
+        })
+        .join("");
+    }
+
+    function renderCartDrawer() {
+      const container = document.getElementById("cartItemsContainer");
+      const entries = Object.entries(cart).filter(([, qty]) => qty > 0);
+
+      if (!entries.length) {
+        container.innerHTML = `<div class="cart-empty">Aún no guardas productos en el carrito.<br />Elige una cantidad y haz clic en <strong>Guardar en carrito</strong>.</div>`;
+        return;
+      }
+
+      container.innerHTML = entries
+        .map(([id, qty]) => {
+          const prod = products.find((item) => item.id === id);
+          if (!prod) return "";
+          const subtotal = prod.price * qty;
+
+          return `
+            <div class="cart-item">
+              <div class="cart-item-top">
+                <div>
+                  <div class="cart-item-title">${prod.sku} · ${prod.name}</div>
+                  <div class="cart-item-sub">${prod.unitLabel} · ${formatMoney(prod.price)} c/u (IVA incluido)</div>
+                </div>
+                <button class="btn btn-danger" type="button" onclick="removeFromCart('${prod.id}')" title="Quitar">✕</button>
+              </div>
+              <div class="cart-item-bottom">
+                <div class="qty-controls">
+                  <button class="qty-btn" type="button" onclick="changeCartQty('${prod.id}', -1)">−</button>
+                  <span class="qty-value">${qty}</span>
+                  <button class="qty-btn" type="button" onclick="changeCartQty('${prod.id}', 1)">+</button>
+                </div>
+                <strong>${formatMoney(subtotal)}</strong>
+              </div>
+            </div>
+          `;
+        })
+        .join("");
+    }
+
+    function updateCartUI() {
+      const summaryEl = document.getElementById("quoteSummary");
+      const barLinkEl = document.getElementById("whatsappQuoteLink");
+      const subtotalEl = document.getElementById("cartSubtotalAmount");
+      const ivaEl = document.getElementById("cartIvaAmount");
+      const totalEl = document.getElementById("cartTotalAmount");
+      const topCountEl = document.getElementById("topCartCount");
+      const bottomCountEl = document.getElementById("bottomCartCount");
+
+      const entries = Object.entries(cart).filter(([, qty]) => qty > 0);
+      let totalItems = 0;
+      let totalWithIva = 0;
+      const lines = [];
+
+      for (const [id, qty] of entries) {
+        const prod = products.find((item) => item.id === id);
+        if (!prod) continue;
+        totalItems += qty;
+        const lineTotal = prod.price * qty;
+        totalWithIva += lineTotal;
+        lines.push(`- ${qty} x ${prod.sku} (${prod.name}, ${prod.unitLabel}): ${formatMoney(lineTotal)}`);
+      }
+
+      const subtotalSinIva = totalWithIva / (1 + IVA_RATE);
+      const ivaIncluded = totalWithIva - subtotalSinIva;
+
+      topCountEl.textContent = totalItems;
+      bottomCountEl.textContent = totalItems;
+      subtotalEl.textContent = formatMoney(subtotalSinIva);
+      ivaEl.textContent = formatMoney(ivaIncluded);
+      totalEl.textContent = formatMoney(totalWithIva);
+
+      if (!entries.length) {
+        summaryEl.innerHTML = `Tu carrito está vacío. Ajusta la cantidad y pulsa <strong>Guardar en carrito</strong>.`;
+        const defaultUrl = `https://wa.me/${PHONE}?text=${encodeURIComponent(`Hola Soluciones de Carga y Herramental, me gustaría solicitar una cotización.\n\n${INVOICE_LEGEND}`)}`;
+        barLinkEl.href = defaultUrl;
+      } else {
+        summaryEl.innerHTML = `<strong>${totalItems}</strong> en carrito · Total (IVA incl.): <strong>${formatMoney(totalWithIva)}</strong>`;
+        const message =
+          `Hola Soluciones de Carga y Herramental, me interesa cotizar / comprar:\n` +
+          `${lines.join("\n")}\n` +
+          `Subtotal (sin IVA): ${formatMoney(subtotalSinIva)}\n` +
+          `IVA (16% ya incluido): ${formatMoney(ivaIncluded)}\n` +
+          `Total estimado (IVA incluido): ${formatMoney(totalWithIva)}\n\n` +
+          `${INVOICE_LEGEND}`;
+        barLinkEl.href = `https://wa.me/${PHONE}?text=${encodeURIComponent(message)}`;
+      }
+
+      if (document.getElementById("cartBackdrop").classList.contains("open")) {
+        renderCartDrawer();
+      }
+    }
+
+    async function sendOrderEmailAutomatically(payload) {
+      const statusEl = document.getElementById("autoMailStatus");
+      statusEl.className = "auto-mail-status";
+      statusEl.textContent = `Enviando notificación a ${ORDER_EMAIL}...`;
+
+      try {
+        const res = await fetch(`https://formsubmit.co/ajax/${ORDER_EMAIL}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json"
+          },
+          body: JSON.stringify(payload)
+        });
+        const data = await res.json();
+        if (res.ok && (data.success === "true" || data.success === true)) {
+          statusEl.className = "auto-mail-status ok";
+          statusEl.textContent = `✓ Notificación enviada a ${ORDER_EMAIL}. (Si es la primera vez, revisa tu correo para activar FormSubmit).`;
+        } else {
+          statusEl.className = "auto-mail-status warn";
+          statusEl.textContent = `Aviso: usa "Notificar por Correo" y "Notificar por WhatsApp" para enviar el detalle al instante.`;
+        }
+      } catch (err) {
+        statusEl.className = "auto-mail-status warn";
+        statusEl.textContent = `Envío directo pendiente (en archivo local o sin red); pulsa "Notificar por Correo" y "Notificar por WhatsApp".`;
+      }
+    }
+
+    function handleBuyClick() {
+      clearCheckoutError();
+
+      const entries = Object.entries(cart).filter(([, qty]) => qty > 0);
+      if (!entries.length) {
+        showCheckoutError("Agrega al menos un producto al carrito antes de comprar.");
+        return;
+      }
+
+      const buyerName = document.getElementById("buyerName").value.trim();
+      const buyerPhone = document.getElementById("buyerPhone").value.trim();
+      const buyerEmail = document.getElementById("buyerEmail").value.trim();
+
+      const cardHolder = document.getElementById("cardHolder").value.trim();
+      const cardDigits = document.getElementById("cardNumber").value.replace(/\D/g, "");
+      const cardExpiry = document.getElementById("cardExpiry").value.trim();
+      const cardCvv = document.getElementById("cardCvv").value.trim();
+      const cardZip = document.getElementById("cardZip").value.trim();
+
+      if (!buyerName || !buyerPhone) {
+        showCheckoutError("Completa tu nombre y teléfono/WhatsApp para enviarte notificación.");
+        return;
+      }
+      if (!cardHolder || cardDigits.length < 15 || !/^(0[1-9]|1[0-2])\/\d{2}$/.test(cardExpiry) || cardCvv.length < 3 || cardZip.length < 4) {
+        showCheckoutError("Revisa los datos de la tarjeta: titular, número (15-16 dígitos), vigencia MM/AA, CVV y CP.");
+        return;
+      }
+
+      const last4 = cardDigits.slice(-4);
+
+      let totalWithIva = 0;
+      const lines = [];
+      for (const [id, qty] of entries) {
+        const prod = products.find((item) => item.id === id);
+        if (!prod) continue;
+        const lineTotal = prod.price * qty;
+        totalWithIva += lineTotal;
+        lines.push(`- ${qty} x ${prod.sku} | ${prod.name} (${prod.unitLabel}): ${formatMoney(lineTotal)}`);
+      }
+
+      const subtotalSinIva = totalWithIva / (1 + IVA_RATE);
+      const ivaIncluded = totalWithIva - subtotalSinIva;
+      const folio = `SCH-${String(Date.now()).slice(-6)}`;
+
+      const summaryLines = [
+        `NUEVA SOLICITUD DE COMPRA - FOLIO #${folio}`,
+        `Negocio: Soluciones de Carga y Herramental`,
+        `Cliente: ${buyerName}`,
+        `Teléfono cliente: ${buyerPhone}`,
+        buyerEmail ? `Correo cliente: ${buyerEmail}` : null,
+        `Pago con tarjeta: •••• ${last4} | Titular: ${cardHolder} | Vigencia: ${cardExpiry} | CP: ${cardZip}`,
+        ``,
+        `Detalle del pedido:`,
+        ...lines,
+        ``,
+        `Subtotal (sin IVA): ${formatMoney(subtotalSinIva)}`,
+        `IVA (16% ya incluido): ${formatMoney(ivaIncluded)}`,
+        `Total (IVA incl.): ${formatMoney(totalWithIva)}`,
+        ``,
+        `${INVOICE_LEGEND}`
+      ].filter((line) => line !== null);
+
+      currentOrderText = summaryLines.join("\n");
+
+      document.getElementById("confirmFolioBadge").textContent = `FOLIO #${folio}`;
+      document.getElementById("confirmSummaryText").textContent = currentOrderText;
+
+      const emailSubject = `Nueva Compra #${folio} - Soluciones de Carga y Herramental`;
+      document.getElementById("sendEmailConfirmBtn").href =
+        `mailto:${encodeURIComponent(ORDER_EMAIL)}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(currentOrderText)}`;
+
+      document.getElementById("sendWhatsappConfirmBtn").href =
+        `https://wa.me/${PHONE}?text=${encodeURIComponent(currentOrderText)}`;
+
+      openConfirmModal();
+
+      sendOrderEmailAutomatically({
+        _subject: emailSubject,
+        folio: folio,
+        cliente: buyerName,
+        telefono_cliente: buyerPhone,
+        correo_cliente: buyerEmail || "No proporcionado",
+        tarjeta_terminacion: `•••• ${last4}`,
+        titular_tarjeta: cardHolder,
+        vigencia_tarjeta: cardExpiry,
+        cp_facturacion: cardZip,
+        subtotal_sin_iva: formatMoney(subtotalSinIva),
+        iva_16_incluido: formatMoney(ivaIncluded),
+        total_iva_incluido: formatMoney(totalWithIva),
+        leyenda_factura: INVOICE_LEGEND,
+        resumen_completo: currentOrderText
+      });
+    }
+
+    document.querySelectorAll(".filter-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        document.querySelectorAll(".filter-btn").forEach((b) => b.classList.remove("active"));
+        btn.classList.add("active");
+        activeCategory = btn.dataset.category;
+        renderCatalog();
+      });
+    });
+
+    document.getElementById("searchInput").addEventListener("input", (e) => {
+      searchQuery = e.target.value;
+      renderCatalog();
+    });
+
+    document.getElementById("openCartTopBtn").addEventListener("click", openCart);
+    document.getElementById("openCartBottomBtn").addEventListener("click", openCart);
+    document.getElementById("closeCartBtn").addEventListener("click", closeCart);
+    document.getElementById("cartBackdrop").addEventListener("click", (e) => {
+      if (e.target.id === "cartBackdrop") closeCart();
+    });
+
+    document.getElementById("confirmOrderBtn").addEventListener("click", handleBuyClick);
+    document.getElementById("closeConfirmBtn").addEventListener("click", closeConfirmModal);
+    document.getElementById("confirmBackdrop").addEventListener("click", (e) => {
+      if (e.target.id === "confirmBackdrop") closeConfirmModal();
+    });
+
+    document.getElementById("clearQuoteBtn").addEventListener("click", clearCart);
+    document.getElementById("drawerClearBtn").addEventListener("click", clearCart);
+
+    document.getElementById("lightboxClose").addEventListener("click", closeLightbox);
+    document.getElementById("lightbox").addEventListener("click", (e) => {
+      if (e.target.id === "lightbox") closeLightbox();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") {
+        closeLightbox();
+        closeConfirmModal();
+        closeCart();
+      }
+    });
+
+    renderCatalog();
+    updateCartUI();
+  </script>
+</body>
+</html>
